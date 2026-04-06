@@ -206,9 +206,6 @@ function initRegisPage() {
 // ══════════════════════════════════════════════════════════════════════════
 // PAGE: dashboard.html
 // ══════════════════════════════════════════════════════════════════════════
-// ══════════════════════════════════════════════════════════════════════════
-// REPLACE YOUR initDashboardPage function in app.js with this entire block
-// ══════════════════════════════════════════════════════════════════════════
 
 async function initDashboardPage() {
   const user = await requireAuth();
@@ -585,71 +582,142 @@ async function initTransactionsPage() {
 // ══════════════════════════════════════════════════════════════════════════
 // PAGE: analytics.html
 // ══════════════════════════════════════════════════════════════════════════
+
 async function initAnalyticsPage() {
   const user = await requireAuth();
   if (!user) return;
 
-  const { ok, data } = await apiFetch('/dashboard');
-  if (!ok) { toast('Failed to load analytics.', true); return; }
+  // Fetch both dashboard data and all transactions
+  const [dashRes, txnRes] = await Promise.all([
+    apiFetch('/dashboard'),
+    apiFetch('/transactions')
+  ]);
 
-  const { ok:tok, data:td } = await apiFetch('/transactions');
-  const countEl = document.querySelector('[data-count="248"]');
-  if (countEl && tok) { countEl.textContent = td.count || 0; }
+  if (!dashRes.ok) { toast('Failed to load analytics.', true); return; }
+  const data = dashRes.data;
+  const txns = txnRes.ok ? txnRes.data.transactions : [];
+  const txnCount = txnRes.ok ? txnRes.data.count : 0;
 
+  // ── Stat cards ──────────────────────────────────────────────────────────
+  document.getElementById('an-count').textContent = txnCount;
+
+  if (data.monthlyTrend?.length) {
+    const expenses = data.monthlyTrend.map(m => m.expenses);
+    const avg = expenses.reduce((a,b)=>a+b,0) / expenses.length;
+    document.getElementById('an-avg').textContent = fmt(avg);
+
+    // Highest month
+    const maxVal = Math.max(...expenses);
+    const maxIdx = expenses.indexOf(maxVal);
+    const maxMonth = data.monthlyTrend[maxIdx];
+    document.getElementById('an-highest-month').textContent = maxMonth.month.split(' ')[0]; // e.g. "Apr"
+    document.getElementById('an-highest-val').textContent = `${fmt(maxVal)} spent`;
+  }
+
+  if (data.categoryBreakdown?.length) {
+    const top = data.categoryBreakdown[0];
+    const total = data.categoryBreakdown.reduce((s,c)=>s+c.total,0);
+    const pct = ((top.total/total)*100).toFixed(1);
+    document.getElementById('an-top-cat').textContent = `${CAT_ICONS[top.category]||''} ${top.category}`;
+    document.getElementById('an-top-cat-pct').textContent = `${pct}% of total spending`;
+  }
+
+  // ── ML Prediction Card ─────────────────────────────────────────────────
+  if (data.enoughDataForML && data.predictedNextMonth) {
+    document.getElementById('ml-predicted').textContent = fmt(data.predictedNextMonth);
+
+    // Compute avg of last 3 months from monthlyTrend
+    const expArr = data.monthlyTrend.map(m=>m.expenses);
+    const last3  = expArr.slice(-3);
+    const avg3   = last3.reduce((a,b)=>a+b,0) / last3.length;
+    document.getElementById('ml-avg3').textContent = fmt(avg3);
+
+    const alertEl = document.getElementById('ml-alert');
+    if (data.overspendingAlert) {
+      alertEl.textContent = '⚠ High Risk';
+      alertEl.style.color = '#fd6f85';
+    } else {
+      alertEl.textContent = '✓ On Track';
+      alertEl.style.color = '#24f07e';
+    }
+  } else {
+    document.getElementById('mlPredContent').classList.add('hidden');
+    document.getElementById('mlNotEnoughData').classList.remove('hidden');
+  }
+
+  // ── Charts ──────────────────────────────────────────────────────────────
   loadCharts(() => {
-    const months   = data.monthlyTrend?.map(m=>m.month)   || [];
-    const incomes  = data.monthlyTrend?.map(m=>m.income)  || [];
-    const expenses = data.monthlyTrend?.map(m=>m.expenses)|| [];
-    const savings  = data.monthlyTrend?.map(m => m.income>0 ? parseFloat((((m.income-m.expenses)/m.income)*100).toFixed(1)) : 0) || [];
+    const months   = data.monthlyTrend?.map(m=>m.month)    || [];
+    const incomes  = data.monthlyTrend?.map(m=>m.income)   || [];
+    const expenses = data.monthlyTrend?.map(m=>m.expenses) || [];
+    const savings  = data.monthlyTrend?.map(m =>
+      m.income > 0 ? parseFloat((((m.income-m.expenses)/m.income)*100).toFixed(1)) : 0
+    ) || [];
 
-    mkChart('trendChart','line',{
-      labels:months,
-      datasets:[{ data:expenses, borderColor:'#7c6ef7', backgroundColor:ctx=>grad(ctx,'rgba(124,110,247,.22)','rgba(124,110,247,0)'), borderWidth:2.5, fill:true, tension:.4, pointRadius:3, pointBackgroundColor:'#7c6ef7' }]
-    },{ yTick:v=>'₹'+(v/1000)+'K' });
+    if (months.length) {
+      mkChart('trendChart','line',{
+        labels:months,
+        datasets:[{ data:expenses, borderColor:'#7c6ef7', backgroundColor:ctx=>grad(ctx,'rgba(124,110,247,.22)','rgba(124,110,247,0)'), borderWidth:2.5, fill:true, tension:.4, pointRadius:3, pointBackgroundColor:'#7c6ef7' }]
+      },{ yTick:v=>'₹'+(v/1000)+'K' });
 
-    mkChart('incomeExpChart','bar',{
-      labels:months,
-      datasets:[
-        { label:'Income',  data:incomes,  backgroundColor:'rgba(110,247,160,.4)',  borderColor:'#6ef7a0', borderWidth:1.5, borderRadius:4 },
-        { label:'Expense', data:expenses, backgroundColor:'rgba(247,110,124,.35)', borderColor:'#f76e7c', borderWidth:1.5, borderRadius:4 }
-      ]
-    },{ legend:true, yTick:v=>'₹'+(v/1000)+'K' });
+      mkChart('incomeExpChart','bar',{
+        labels:months,
+        datasets:[
+          { label:'Income',  data:incomes,  backgroundColor:'rgba(110,247,160,.4)',  borderColor:'#6ef7a0', borderWidth:1.5, borderRadius:4 },
+          { label:'Expense', data:expenses, backgroundColor:'rgba(247,110,124,.35)', borderColor:'#f76e7c', borderWidth:1.5, borderRadius:4 }
+        ]
+      },{ legend:true, yTick:v=>'₹'+(v/1000)+'K' });
+
+      mkChart('savingsChart','line',{
+        labels:months,
+        datasets:[{ data:savings, borderColor:'#6ef7a0', backgroundColor:ctx=>grad(ctx,'rgba(110,247,160,.18)','rgba(110,247,160,0)'), borderWidth:2.5, fill:true, tension:.4, pointRadius:3, pointBackgroundColor:'#6ef7a0' }]
+      },{ yTick:v=>v+'%' });
+    }
 
     if (data.categoryBreakdown?.length) {
       mkChart('catChart','doughnut',{
         labels  : data.categoryBreakdown.map(c=>c.category),
-        datasets: [{ data:data.categoryBreakdown.map(c=>c.total), backgroundColor:['#7c6ef7','#f7c56e','#6ef7c5','#f76e7c','#6ea8f7','#c56ef7','#49d7f4','#24f07e'], borderColor:'transparent', hoverOffset:7 }]
+        datasets: [{ data:data.categoryBreakdown.map(c=>c.total), backgroundColor:['#b884ff','#f7c56e','#6ef7c5','#f76e7c','#6ea8f7','#c56ef7','#49d7f4','#24f07e'], borderColor:'transparent', hoverOffset:7 }]
       },{ legendBottom:true });
     }
 
-    mkChart('savingsChart','line',{
-      labels:months,
-      datasets:[{ data:savings, borderColor:'#6ef7a0', backgroundColor:ctx=>grad(ctx,'rgba(110,247,160,.18)','rgba(110,247,160,0)'), borderWidth:2.5, fill:true, tension:.4, pointRadius:3, pointBackgroundColor:'#6ef7a0' }]
-    },{ yTick:v=>v+'%' });
-
+    // Day of week — compute from real transactions
+    const dowTotals = [0,0,0,0,0,0,0]; // Mon=0 … Sun=6
+    txns.filter(t=>t.type==='expense').forEach(t => {
+      const d = new Date(t.date);
+      const dow = (d.getDay()+6)%7; // convert Sun=0 to Mon=0
+      dowTotals[dow] += Math.abs(t.amount);
+    });
     mkChart('dowChart','bar',{
       labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
-      datasets:[{ data:[2800,3200,2600,3900,5400,7200,4100], backgroundColor:ctx=>{ const v=ctx.raw; return v>=7000?'#f7c56e':v>=5000?'#f76e7c':'rgba(124,110,247,.5)'; }, borderRadius:4 }]
-    },{ yTick:v=>'₹'+(v/1000)+'K' });
+      datasets:[{ data:dowTotals, backgroundColor:ctx=>{ const v=ctx.raw; return v>=Math.max(...dowTotals)*0.85?'#f7c56e':v>=Math.max(...dowTotals)*0.6?'#f76e7c':'rgba(124,110,247,.5)'; }, borderRadius:4 }]
+    },{ yTick:v=>'₹'+(v/1000).toFixed(1)+'K' });
   });
 
-  // Category breakdown table
+  // ── Category table ──────────────────────────────────────────────────────
   const catTable = document.getElementById('catTable');
-  if (catTable && data.categoryBreakdown?.length) {
-    const total = data.categoryBreakdown.reduce((s,c)=>s+c.total, 0);
-    catTable.innerHTML = data.categoryBreakdown.map(c => {
-      const pct = (c.total/total*100).toFixed(1);
-      return `<tr>
-        <td style="font-weight:600">${CAT_ICONS[c.category]||'💳'} ${c.category}</td>
-        <td style="color:#a9a9bd">—</td>
-        <td style="font-weight:700">${fmt(c.total)}</td>
-        <td style="color:#a9a9bd">—</td>
-        <td><div style="display:flex;align-items:center;gap:.4rem"><div class="prog-wrap" style="width:68px"><div class="prog-fill" style="width:${pct}%"></div></div><span style="font-size:.76rem;color:#a9a9bd">${pct}%</span></div></td>
-        <td style="color:#a9a9bd">—</td>
-      </tr>`;
-    }).join('');
+  if (catTable) {
+    if (!data.categoryBreakdown?.length) {
+      catTable.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#a9a9bd;padding:2rem">No expense data yet.</td></tr>';
+    } else {
+      const total = data.categoryBreakdown.reduce((s,c)=>s+c.total,0);
+      catTable.innerHTML = data.categoryBreakdown.map(c => {
+        const pct = (c.total/total*100).toFixed(1);
+        return `<tr>
+          <td style="font-weight:600">${CAT_ICONS[c.category]||'💳'} ${c.category}</td>
+          <td style="font-weight:700">${fmt(c.total)}</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:.5rem">
+              <div class="prog-wrap" style="width:80px"><div class="prog-fill" style="width:${pct}%"></div></div>
+              <span style="font-size:.76rem;color:#a9a9bd">${pct}%</span>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+    }
   }
 
+  // Logout + burger
   document.querySelectorAll('a[href="regis.html"]').forEach(link => {
     link.addEventListener('click', async e => {
       e.preventDefault();
@@ -657,7 +725,6 @@ async function initAnalyticsPage() {
       window.location.href = 'regis.html';
     });
   });
-
   document.getElementById('burger')?.addEventListener('click', () => {
     const m = document.getElementById('mobileMenu');
     m?.classList.remove('hidden'); m?.classList.add('flex');

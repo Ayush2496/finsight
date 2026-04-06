@@ -229,3 +229,36 @@ body {
     .btn-primary:hover { box-shadow: 0 8px 30px rgba(184, 132, 255, 0.5); transform: translateY(-1px); }
     
     #toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: #24f07e; color: #004820; padding: 0.75rem 1.5rem; border-radius: 999px; font-weight: 700; font-size: 0.875rem; box-shadow: 0 10px 30px rgba(36, 240, 126, 0.3); display: none; z-index: 1000; }
+
+    /* ── Fix ₹ symbol overlapping amount input ─────────────────────────────── */
+.fg .amount-wrap { position: relative; }
+.fg .amount-wrap .rupee-symbol {
+  position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
+  color: #a9a9bd; font-weight: 700; pointer-events: none; z-index: 1;
+}
+.fg .amount-wrap input { padding-left: 2rem; }
+
+/* Also fix budget modal inputs which also have ₹ prefix */
+.fg input.pl-10\! { padding-left: 2.2rem !important; }
+
+/* ── Budget modal compact layout ──────────────────────────────────────────*/
+#budgetForm .fg { margin-bottom: 0.75rem; }
+#budgetForm .fg label {
+  font-size: 0.75rem; font-weight: 700; color: #a9a9bd;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  display: block; margin-bottom: 0.35rem;
+}
+#budgetForm .fg .relative { position: relative; }
+#budgetForm .fg .absolute {
+  position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
+  color: #a9a9bd; font-weight: 700; pointer-events: none;
+}
+#budgetForm .fg input {
+  width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 0.75rem; padding: 0.6rem 1rem 0.6rem 2rem;
+  color: #e4e4f9; font-family: 'Lexend'; outline: none;
+}
+#budgetForm .fg input:focus { border-color: #b884ff; }
+
+/* ── ML prediction card ───────────────────────────────────────────────────*/
+#mlPredCard { background: linear-gradient(135deg, rgba(36,240,126,0.05), rgba(184,132,255,0.05)); }
