@@ -7,248 +7,217 @@
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-  
   <link rel="stylesheet" href="style.css" />
   <script src="app.js"></script>
 </head>
 <body class="selection:bg-primary selection:text-black">
 
-<!-- Radial Background -->
 <div class="fixed inset-0 obsidian-radial pointer-events-none z-[-1]"></div>
 
 <div class="flex h-screen overflow-hidden">
-  
-  <!-- Sidebar Navigation -->
+
   <aside class="w-64 flex-shrink-0 glass-card border-l-0 border-t-0 border-b-0 hidden md:flex flex-col relative z-20">
     <div class="p-6">
-      <a href="test.html" class="text-2xl font-black text-on-surface tracking-tighter hover:text-primary transition-colors flex items-center gap-2">
-        <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+      <a href="index.html" class="text-2xl font-black text-on-surface tracking-tighter hover:text-primary transition-colors flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">account_balance_wallet</span>
         FinSight
       </a>
     </div>
-    
     <div class="flex-1 overflow-y-auto px-4 py-4 space-y-8">
       <div>
         <span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest ml-4 mb-2 block">Menu</span>
         <nav class="space-y-1">
           <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all font-medium">
-            <span class="material-symbols-outlined">dashboard</span>
-            Dashboard
+            <span class="material-symbols-outlined">dashboard</span> Dashboard
           </a>
           <a href="transactions.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all font-medium">
-            <span class="material-symbols-outlined">receipt_long</span>
-            Transactions
+            <span class="material-symbols-outlined">receipt_long</span> Transactions
           </a>
           <a href="analytics.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-surface-container-high text-primary font-bold transition-all border border-primary/20 shadow-[0_0_15px_rgba(184,132,255,0.1)]">
-            <span class="material-symbols-outlined">bar_chart</span>
-            Analytics
+            <span class="material-symbols-outlined">bar_chart</span> Analytics
           </a>
         </nav>
       </div>
-      
       <div>
         <span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest ml-4 mb-2 block">Account</span>
         <nav class="space-y-1">
-
           <a href="regis.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:text-error hover:bg-surface-container transition-all font-medium mt-4">
-            <span class="material-symbols-outlined">logout</span>
-            Logout
+            <span class="material-symbols-outlined">logout</span> Logout
           </a>
         </nav>
       </div>
     </div>
   </aside>
 
-  <!-- Main Content -->
   <main class="flex-1 overflow-y-auto relative z-10 w-full">
-    
-    <!-- Top Nav Mobile (Hidden on Desktop) -->
+
     <header class="md:hidden flex items-center justify-between p-4 glass-card border-x-0 border-t-0 sticky top-0 z-30">
-        <a href="test.html" class="text-xl font-black text-on-surface tracking-tighter flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
-            FinSight
-        </a>
-        <button id="burger" class="text-on-surface-variant p-2">
-            <span class="material-symbols-outlined">menu</span>
-        </button>
+      <a href="index.html" class="text-xl font-black text-on-surface tracking-tighter flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">account_balance_wallet</span> FinSight
+      </a>
+      <button id="burger" class="text-on-surface-variant p-2"><span class="material-symbols-outlined">menu</span></button>
     </header>
 
-    <!-- Mobile Menu Overlay -->
     <div id="mobileMenu" class="fixed inset-0 bg-surface z-40 hidden flex-col">
-        <div class="flex justify-end p-6">
-             <button class="text-on-surface-variant material-symbols-outlined" onclick="document.getElementById('mobileMenu').classList.add('hidden')">close</button>
-        </div>
-        <div class="flex flex-col items-center gap-6 mt-10">
-            <a href="dashboard.html" class="text-2xl font-bold">Dashboard</a>
-            <a href="transactions.html" class="text-2xl font-bold">Transactions</a>
-            <a href="analytics.html" class="text-2xl font-bold text-primary">Analytics</a>
-            <a href="regis.html" class="text-2xl font-bold text-on-surface-variant">Logout</a>
-        </div>
+      <div class="flex justify-end p-6">
+        <button class="text-on-surface-variant material-symbols-outlined" onclick="document.getElementById('mobileMenu').classList.add('hidden')">close</button>
+      </div>
+      <div class="flex flex-col items-center gap-6 mt-10">
+        <a href="dashboard.html" class="text-2xl font-bold">Dashboard</a>
+        <a href="transactions.html" class="text-2xl font-bold">Transactions</a>
+        <a href="analytics.html" class="text-2xl font-bold text-primary">Analytics</a>
+        <a href="regis.html" class="text-2xl font-bold text-on-surface-variant">Logout</a>
+      </div>
     </div>
 
-    <!-- Page Content -->
     <div class="p-6 md:p-10 max-w-7xl mx-auto space-y-8">
-      
+
       <!-- Header -->
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-        <div>
-          <h1 class="text-3xl md:text-4xl font-black font-headline tracking-tighter">Forensics & Analytics</h1>
-          <p class="text-on-surface-variant text-sm mt-1">Deep analysis of spending patterns over the last 6 months.</p>
-        </div>
-        <select class="bg-surface-container-low border border-outline-variant/30 text-sm font-semibold text-on-surface-variant py-2 px-4 rounded-xl outline-none focus:border-primary transition-colors">
-          <option>Last 6 months</option>
-          <option>Last 3 months</option>
-          <option>This year</option>
-        </select>
+      <div>
+        <h1 class="text-3xl md:text-4xl font-black font-headline tracking-tighter">Analytics</h1>
+        <p class="text-on-surface-variant text-sm mt-1">Real spending analysis from your transactions.</p>
       </div>
 
-      <!-- Stats Grid -->
+      <!-- Stats Grid — all filled by JS with real data -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        
+
         <div class="glass-card p-6 rounded-3xl border border-white/5 relative overflow-hidden group hover:border-white/10 transition-colors">
-          <div class="flex justify-between items-start mb-4 relative z-10">
-            <span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Avg Monthly Expenses</span>
+          <div class="flex justify-between items-start mb-4">
+            <span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Avg Monthly Spend</span>
             <div class="w-8 h-8 rounded-lg bg-error/10 flex items-center justify-center">
               <span class="material-symbols-outlined text-error text-sm" style="font-variation-settings:'FILL' 1;">show_chart</span>
             </div>
           </div>
-          <div class="relative z-10">
-            <div class="text-3xl font-black tracking-tight" data-count="34820" data-pre="₹">₹34,820</div>
-            <div class="text-xs font-semibold text-error mt-2 flex items-center gap-1">
-              <span class="material-symbols-outlined text-[14px]">trending_up</span> 2.4% vs prior period
-            </div>
-          </div>
+          <div id="an-avg" class="text-3xl font-black tracking-tight">₹0</div>
+          <div class="text-xs font-semibold text-on-surface-variant mt-2">Based on your history</div>
         </div>
 
         <div class="glass-card p-6 rounded-3xl border border-white/5 relative overflow-hidden group hover:border-white/10 transition-colors">
-          <div class="flex justify-between items-start mb-4 relative z-10">
+          <div class="flex justify-between items-start mb-4">
             <span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Highest Month</span>
             <div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center">
               <span class="material-symbols-outlined text-on-surface text-sm" style="font-variation-settings:'FILL' 1;">calendar_month</span>
             </div>
           </div>
-          <div class="relative z-10">
-            <div class="text-3xl font-black tracking-tight">October</div>
-            <div class="text-xs font-semibold text-on-surface-variant mt-2 flex items-center gap-1">
-              ₹41,200 spent
-            </div>
-          </div>
+          <div id="an-highest-month" class="text-3xl font-black tracking-tight">—</div>
+          <div id="an-highest-val" class="text-xs font-semibold text-on-surface-variant mt-2">—</div>
         </div>
 
         <div class="glass-card p-6 rounded-3xl border border-white/5 relative overflow-hidden group hover:border-white/10 transition-colors">
-          <div class="flex justify-between items-start mb-4 relative z-10">
+          <div class="flex justify-between items-start mb-4">
             <span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Top Category</span>
             <div class="w-8 h-8 rounded-lg bg-secondary/10 flex items-center justify-center">
               <span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings:'FILL' 1;">category</span>
             </div>
           </div>
-          <div class="relative z-10">
-            <div class="text-3xl font-black tracking-tight">Shopping</div>
-            <div class="text-xs font-semibold text-primary mt-2 flex items-center gap-1">
-              <span class="material-symbols-outlined text-[14px]">pie_chart</span> 28% of total
-            </div>
-          </div>
+          <div id="an-top-cat" class="text-3xl font-black tracking-tight">—</div>
+          <div id="an-top-cat-pct" class="text-xs font-semibold text-primary mt-2">—</div>
         </div>
 
         <div class="glass-card p-6 rounded-3xl border border-white/5 relative overflow-hidden group hover:border-white/10 transition-colors">
-          <div class="flex justify-between items-start mb-4 relative z-10">
+          <div class="flex justify-between items-start mb-4">
             <span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Total Transactions</span>
             <div class="w-8 h-8 rounded-lg bg-tertiary/10 flex items-center justify-center">
               <span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings:'FILL' 1;">receipt_long</span>
             </div>
           </div>
-          <div class="relative z-10">
-            <div class="text-3xl font-black tracking-tight" data-count="248">0</div>
-            <div class="text-xs font-semibold text-on-surface-variant mt-2 flex items-center gap-1">
-              across 6 months
+          <div id="an-count" class="text-3xl font-black tracking-tight">0</div>
+          <div class="text-xs font-semibold text-on-surface-variant mt-2">All time</div>
+        </div>
+
+      </div>
+
+      <!-- ML Prediction Card — Linear Regression result -->
+      <div class="glass-card rounded-3xl p-6 border border-primary/20" id="mlPredCard">
+        <div class="flex items-start justify-between gap-4">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-xl bg-tertiary/10 flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-tertiary" style="font-variation-settings:'FILL' 1;">auto_awesome</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg font-headline">ML Spending Prediction</h3>
+              <p class="text-xs text-on-surface-variant">Linear Regression model trained on your monthly totals</p>
             </div>
           </div>
         </div>
-
+        <div id="mlPredContent" class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2">
+          <div class="bg-surface-container-high rounded-2xl p-4">
+            <div class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2">Predicted Next Month</div>
+            <div id="ml-predicted" class="text-2xl font-black text-tertiary">—</div>
+          </div>
+          <div class="bg-surface-container-high rounded-2xl p-4">
+            <div class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2">Avg Last 3 Months</div>
+            <div id="ml-avg3" class="text-2xl font-black">—</div>
+          </div>
+          <div class="bg-surface-container-high rounded-2xl p-4">
+            <div class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2">Overspending Risk</div>
+            <div id="ml-alert" class="text-2xl font-black">—</div>
+          </div>
+        </div>
+        <div id="mlNotEnoughData" class="text-sm text-on-surface-variant mt-4 hidden">
+          ⚠ Need at least 3 months of expense data for a prediction. Keep adding transactions!
+        </div>
       </div>
 
       <!-- Main Charts Row -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
-        <!-- Spending Trend -->
         <div class="glass-card p-6 rounded-3xl flex flex-col">
           <div class="mb-6">
             <h3 class="font-bold text-lg font-headline">Spending Trend</h3>
-            <p class="text-xs text-on-surface-variant">Monthly expenses volume</p>
+            <p class="text-xs text-on-surface-variant">Monthly expense volume</p>
           </div>
-          <div class="flex-1 w-full min-h-[250px] relative">
-            <canvas id="trendChart"></canvas>
-          </div>
+          <div class="flex-1 w-full min-h-[250px] relative"><canvas id="trendChart"></canvas></div>
         </div>
-
-        <!-- Income vs Expense -->
         <div class="glass-card p-6 rounded-3xl flex flex-col">
           <div class="mb-6">
-             <h3 class="font-bold text-lg font-headline">Income vs Expense</h3>
-             <p class="text-xs text-on-surface-variant">Net savings per month</p>
+            <h3 class="font-bold text-lg font-headline">Income vs Expense</h3>
+            <p class="text-xs text-on-surface-variant">Net savings per month</p>
           </div>
-          <div class="flex-1 w-full min-h-[250px] relative">
-             <canvas id="incomeExpChart"></canvas>
-          </div>
+          <div class="flex-1 w-full min-h-[250px] relative"><canvas id="incomeExpChart"></canvas></div>
         </div>
-
       </div>
 
-      <!-- Secondary Charts Row -->
+      <!-- Secondary Charts -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
         <div class="glass-card p-6 rounded-3xl flex flex-col">
           <div class="mb-6">
-             <h3 class="font-bold text-lg font-headline">Category Split</h3>
-             <p class="text-xs text-on-surface-variant">Where money goes</p>
+            <h3 class="font-bold text-lg font-headline">Category Split</h3>
+            <p class="text-xs text-on-surface-variant">Where your money goes</p>
           </div>
-          <div class="flex-1 w-full min-h-[220px] relative">
-             <canvas id="catChart"></canvas>
-          </div>
+          <div class="flex-1 w-full min-h-[220px] relative"><canvas id="catChart"></canvas></div>
         </div>
-
         <div class="glass-card p-6 rounded-3xl flex flex-col">
           <div class="mb-6">
-             <h3 class="font-bold text-lg font-headline">Day of Week</h3>
-             <p class="text-xs text-on-surface-variant">Busiest spending days</p>
+            <h3 class="font-bold text-lg font-headline">Day of Week</h3>
+            <p class="text-xs text-on-surface-variant">Busiest spending days</p>
           </div>
-          <div class="flex-1 w-full min-h-[220px] relative">
-             <canvas id="dowChart"></canvas>
-          </div>
+          <div class="flex-1 w-full min-h-[220px] relative"><canvas id="dowChart"></canvas></div>
         </div>
-
         <div class="glass-card p-6 rounded-3xl flex flex-col">
           <div class="mb-6">
-             <h3 class="font-bold text-lg font-headline">Yield Rate</h3>
-             <p class="text-xs text-on-surface-variant">% saved each month</p>
+            <h3 class="font-bold text-lg font-headline">Savings Yield</h3>
+            <p class="text-xs text-on-surface-variant">% saved each month</p>
           </div>
-          <div class="flex-1 w-full min-h-[220px] relative">
-             <canvas id="savingsChart"></canvas>
-          </div>
+          <div class="flex-1 w-full min-h-[220px] relative"><canvas id="savingsChart"></canvas></div>
         </div>
-
       </div>
 
       <!-- Category Breakdown Table -->
-      <div class="glass-card rounded-3xl p-6 relative overflow-hidden">
+      <div class="glass-card rounded-3xl p-6">
         <div class="flex justify-between items-center mb-6">
           <h3 class="font-bold text-lg font-headline">Category Breakdown</h3>
         </div>
-        
         <div class="overflow-x-auto">
-          <table class="tbl w-full min-w-[700px]">
+          <table class="tbl w-full min-w-[600px]">
             <thead>
               <tr>
-                <th>Classification</th>
-                <th>Volume</th>
+                <th>Category</th>
                 <th>Total Spent (₹)</th>
-                <th>Avg / Txn (₹)</th>
-                <th style="min-width: 120px;">Share</th>
-                <th>Trend (vs Last Month)</th>
+                <th style="min-width:120px">Share</th>
               </tr>
             </thead>
             <tbody id="catTable">
-              <!-- Injected by app.js -->
+              <tr><td colspan="3" style="text-align:center;color:#a9a9bd;padding:2rem">Loading...</td></tr>
             </tbody>
           </table>
         </div>
@@ -257,6 +226,5 @@
     </div>
   </main>
 </div>
-
 </body>
 </html>
