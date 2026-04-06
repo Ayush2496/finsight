@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css" />
+  <script src="app.js"></script>
+</head>
+<body class="text-on-surface overflow-x-hidden overflow-y-auto min-h-screen flex items-center justify-center py-10">
+<div class="fixed inset-0 obsidian-pulse-glow pointer-events-none"></div>
+<div class="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary/10 blur-[120px] rounded-full pointer-events-none"></div>
+<div class="fixed bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-secondary/5 blur-[150px] rounded-full pointer-events-none"></div>
+<main class="relative z-10 w-full max-w-[440px] px-6 my-6">
+<div class="flex flex-col items-center mb-10">
+<div class="w-16 h-16 bg-surface-container-highest rounded-2xl flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(149,71,247,0.2)] border border-primary/20">
+<span class="material-symbols-outlined text-4xl text-primary" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+</div>
+<h1 class="text-3xl font-black text-on-surface tracking-tighter">FinSight</h1>
+<p class="text-on-surface-variant text-sm mt-1 font-medium">Digital Curator of Wealth</p>
+</div>
+<div class="glass-vault rounded-[2.5rem] p-8 shadow-2xl relative group">
+<div class="absolute -top-4 -right-4 w-24 h-24 bg-tertiary/10 blur-2xl rounded-full pointer-events-none opacity-50"></div>
+<div class="flex p-1 bg-surface-container-lowest rounded-full mb-8">
+<button class="auth-tab flex-1 py-2 text-sm font-semibold rounded-full bg-surface-container-high text-primary transition-all duration-300" data-target="login-panel" type="button">Login</button>
+<button class="auth-tab flex-1 py-2 text-sm font-semibold rounded-full text-on-surface-variant hover:text-on-surface transition-all duration-300" data-target="register-panel" type="button">Register</button>
+</div>
+<form action="#" class="auth-panel space-y-6" id="login-panel">
+<div class="space-y-2">
+<label class="block text-xs font-bold text-on-surface-variant tracking-widest px-1 uppercase">Access Identity</label>
+<div class="relative flex items-center group/input input-glow transition-all duration-300 rounded-2xl bg-surface-container-lowest">
+<span class="material-symbols-outlined absolute left-4 text-on-surface-variant group-focus-within/input:text-primary transition-colors">mail</span>
+<input class="w-full bg-transparent border-none py-4 pl-12 pr-4 text-on-surface placeholder:text-outline focus:ring-0 rounded-2xl font-medium" placeholder="enter your email" type="email"/>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center px-1">
+<label class="text-xs font-bold text-on-surface-variant tracking-widest uppercase">Encryption Key</label>
+</div>
+<div class="relative flex items-center group/input input-glow transition-all duration-300 rounded-2xl bg-surface-container-lowest">
+<span class="material-symbols-outlined absolute left-4 text-on-surface-variant group-focus-within/input:text-primary transition-colors">lock</span>
+<input class="w-full bg-transparent border-none py-4 pl-12 pr-12 text-on-surface placeholder:text-outline focus:ring-0 rounded-2xl font-medium" placeholder="Password" type="password"/>
+<button aria-label="Show password" class="password-toggle absolute right-4 text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<button type="submit" class="w-full mt-4 py-4 px-6 rounded-full bg-gradient-to-r from-primary-container to-primary text-on-primary-container font-black text-sm tracking-wide shadow-[0_8px_30px_rgba(157,80,255,0.3)] hover:shadow-[0_8px_40px_rgba(157,80,255,0.5)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2">
+                    Authorize Access
+                    <span class="material-symbols-outlined text-lg">shield_with_heart</span>
+</button>
+</form>
+<form action="#" class="auth-panel space-y-6" hidden id="register-panel">
+<div class="space-y-2">
+<label class="block text-xs font-bold text-on-surface-variant tracking-widest px-1 uppercase">Full Name</label>
+<div class="relative flex items-center group/input input-glow transition-all duration-300 rounded-2xl bg-surface-container-lowest">
+<span class="material-symbols-outlined absolute left-4 text-on-surface-variant group-focus-within/input:text-primary transition-colors">person</span>
+<input class="w-full bg-transparent border-none py-4 pl-12 pr-4 text-on-surface placeholder:text-outline focus:ring-0 rounded-2xl font-medium" placeholder="enter your full name" type="text"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="block text-xs font-bold text-on-surface-variant tracking-widest px-1 uppercase">Email Address</label>
+<div class="relative flex items-center group/input input-glow transition-all duration-300 rounded-2xl bg-surface-container-lowest">
+<span class="material-symbols-outlined absolute left-4 text-on-surface-variant group-focus-within/input:text-primary transition-colors">mail</span>
+<input class="w-full bg-transparent border-none py-4 pl-12 pr-4 text-on-surface placeholder:text-outline focus:ring-0 rounded-2xl font-medium" placeholder="enter your email" type="email"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="block text-xs font-bold text-on-surface-variant tracking-widest px-1 uppercase">Create Password</label>
+<div class="relative flex items-center group/input input-glow transition-all duration-300 rounded-2xl bg-surface-container-lowest">
+<span class="material-symbols-outlined absolute left-4 text-on-surface-variant group-focus-within/input:text-primary transition-colors">lock</span>
+<input class="w-full bg-transparent border-none py-4 pl-12 pr-12 text-on-surface placeholder:text-outline focus:ring-0 rounded-2xl font-medium" placeholder="Create a secure password" type="password"/>
+<button aria-label="Show password" class="password-toggle absolute right-4 text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<div class="space-y-2">
+<label class="block text-xs font-bold text-on-surface-variant tracking-widest px-1 uppercase">Confirm Password</label>
+<div class="relative flex items-center group/input input-glow transition-all duration-300 rounded-2xl bg-surface-container-lowest">
+<span class="material-symbols-outlined absolute left-4 text-on-surface-variant group-focus-within/input:text-primary transition-colors">verified_user</span>
+<input class="w-full bg-transparent border-none py-4 pl-12 pr-12 text-on-surface placeholder:text-outline focus:ring-0 rounded-2xl font-medium" placeholder="Confirm your password" type="password"/>
+<button aria-label="Show password" class="password-toggle absolute right-4 text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<button class="w-full mt-4 py-4 px-6 rounded-full bg-gradient-to-r from-primary-container to-primary text-on-primary-container font-black text-sm tracking-wide shadow-[0_8px_30px_rgba(157,80,255,0.3)] hover:shadow-[0_8px_40px_rgba(157,80,255,0.5)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2" type="submit">
+                    Create Account
+                    <span class="material-symbols-outlined text-lg">person_add</span>
+</button>
+</form>
+</div>
+<footer class="mt-12 text-center">
+<p class="text-[11px] text-on-surface-variant/60 font-medium leading-relaxed">
+                By accessing the vault, you agree to our 
+                <a class="text-on-surface-variant hover:text-on-surface underline underline-offset-4 decoration-primary/30 transition-colors" href="#">Protocol Standards</a> 
+                and 
+                <a class="text-on-surface-variant hover:text-on-surface underline underline-offset-4 decoration-primary/30 transition-colors" href="#">Privacy Encryption</a>.
+            </p>
+</footer>
+</main>
+<div class="fixed -bottom-24 -right-24 w-96 h-96 opacity-20 blur-sm mix-blend-screen pointer-events-none select-none">
+<img alt="abstract digital geometry" class="w-full h-full object-contain" data-alt="abstract floating glass crystalline structure with iridescent purple and blue light refractions against a deep black void" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADWdA1MUI6Lz4ay6sCSi0RgWOxCTv9mhSuJbRukuiIVU26qXORuDm-SDtuVxHiyWolzJ-kj6viT9cYPnjhiAwWgkbcvNzOtP_ICEbO7HVH4gix2xXVTwEhS9vQ2Koob6QLwf798xCS5PYlGhtHgQiBOLlv3GXzxWNWWXG59_QTCt3Ady2WV18Dsp7EQfViDhnVCl3mOpNENeOjbfILFV2Pkk0dkiSV9YDYcLtyzXWuo8LXyhIMCVJho4k7seQPz16ZVsM6NVugUkt1"/>
+</div>
+</body></html>

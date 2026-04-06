@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FinSight | Premium Wealth Vault</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css" />
+  <script src="app.js"></script>
+</head>
+<body class="selection:bg-primary selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#0d0e16]/60 backdrop-blur-xl shadow-[0_4px_40px_rgba(149,71,247,0.08)]">
+<div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
+<a class="text-2xl font-black text-[#e4e4f9] tracking-tighter font-['Lexend'] hover:text-primary transition-colors" href="index.html">
+                FinSight
+            </a>
+<div class="flex items-center gap-4">
+<a href="regis.html" class="inline-flex items-center justify-center px-6 py-2.5 rounded-full font-bold text-sm border border-white/15 text-on-surface hover:bg-surface-container-high active:scale-95 transition-all">
+                    Login
+                </a>
+<a href="regis.html#register" class="inline-flex items-center justify-center bg-gradient-to-r from-primary to-primary-container text-on-primary-container px-6 py-2.5 rounded-full font-bold text-sm hover:brightness-110 active:scale-95 duration-200 transition-all shadow-[0_10px_30px_rgba(184,132,255,0.28)]">
+                    Get Started
+                </a>
+</div>
+</div>
+</header>
+<main class="relative min-h-screen pt-24 overflow-hidden">
+<!-- Radial Background -->
+<div class="absolute inset-0 obsidian-radial pointer-events-none"></div>
+<!-- Hero Section -->
+<section class="relative max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[870px]">
+<!-- Hero Left -->
+<div class="space-y-8">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high border border-outline-variant/20">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="text-xs font-label font-medium text-on-surface-variant tracking-wider uppercase">Institutional Grade Security</span>
+</div>
+<h1 class="text-6xl md:text-8xl font-black font-headline tracking-tighter leading-[0.9] text-on-surface">
+                    Your money,<br/>under control.
+                </h1>
+<p class="text-xl text-on-surface-variant max-w-lg leading-relaxed font-body">
+                    Experience a luminescent vault for your assets. Precise tracking, AI-driven forecasting, and editorial-grade data visualization.
+                </p>
+<div class="flex flex-wrap gap-4 pt-4">
+<a href="regis.html#register" class="inline-flex items-center justify-center bg-gradient-to-r from-primary to-primary-container text-on-primary-container px-8 py-4 rounded-full font-bold text-lg hover:brightness-110 active:scale-95 transition-all shadow-[0_10px_40px_rgba(184,132,255,0.3)]">
+                        Get Started
+                    </a>
+<a href="regis.html" class="inline-flex items-center justify-center px-8 py-4 rounded-full font-bold text-lg border border-white hover:bg-surface-container-high active:scale-95 transition-all">
+
+                        Login
+                    </a>
+</div>
+</div>
+<!-- Hero Right: Floating 3D Dashboard -->
+<div class="relative flex justify-center lg:justify-end">
+<div class="relative w-full max-w-[500px] aspect-square">
+<!-- Main Card -->
+<div class="absolute inset-0 glass-card rounded-[2rem] p-8 vault-hud-shadow border border-white/5 rotate-[-2deg] z-20">
+<div class="flex justify-between items-start mb-12">
+<div>
+<p class="text-on-surface-variant text-sm font-medium mb-1">Total Liquidity</p>
+<h2 class="text-5xl font-bold tracking-tight text-on-surface font-headline">₹84,320<span class="text-2xl text-on-surface-variant opacity-50">.00</span></h2>
+</div>
+<div class="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+</div>
+</div>
+<!-- Sparkline Visualization -->
+<div class="h-32 w-full mb-8 relative">
+<svg class="w-full h-full overflow-visible" viewbox="0 0 100 40">
+<defs>
+<lineargradient id="lineGrad" x1="0" x2="1" y1="0" y2="0">
+<stop offset="0%" stop-color="#49d7f4"></stop>
+<stop offset="100%" stop-color="#b884ff"></stop>
+</lineargradient>
+<lineargradient id="areaGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#b884ff" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#b884ff" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0 35 Q 20 10, 40 25 T 100 5" fill="none" stroke="url(#lineGrad)" stroke-width="2"></path>
+<path d="M0 35 Q 20 10, 40 25 T 100 5 V 40 H 0 Z" fill="url(#areaGrad)"></path>
+</svg>
+</div>
+<!-- Transaction Item -->
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest/50 rounded-2xl border border-white/5">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-white">
+<img alt="Zomato Logo" class="w-full h-full object-cover" data-alt="Red logo of Zomato food delivery app on a clean white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLTDwjjwXR0rEsJRboWc8x0BPH6CWooMi0PCarSAEiPqQK0dob3nABrb4tgk08Kr78-zwE4_RlLKvC9ShGlQFEvCYeN_Yt50xgdhSgw_jwouo-QX4mWWGefWu8ZAyAhFVSVHeCN88_WWyR6gXazRKQ-I3WrlxcryUesfn49xZu7kbXBX3AsbIFwprCWSpZNOeXmMeA2cnuWkjOkCCBaN0e6EZQFFzmT3wnKL3KtXX4Z-IujjQQOeCVtEbmA_IY41ak1IYYNGAXnf5V"/>
+</div>
+<div>
+<p class="font-bold text-sm">Zomato</p>
+<p class="text-xs text-on-surface-variant">Food &amp; Dining • Today</p>
+</div>
+</div>
+<p class="font-bold text-error">- ₹420.00</p>
+</div>
+</div>
+<!-- ML Prediction Pill Layer -->
+<div class="absolute -top-6 -right-6 glass-card px-6 py-4 rounded-2xl z-30 shadow-2xl border border-tertiary/20 flex items-center gap-3 translate-y-4">
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-tertiary/20">
+<span class="material-symbols-outlined text-tertiary text-lg" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">ML Prediction</p>
+<p class="text-sm font-bold text-tertiary">+12.4% Est. Growth</p>
+</div>
+</div>
+<!-- Decorative Background Card -->
+<div class="absolute inset-0 bg-primary/5 rounded-[2rem] rotate-[4deg] blur-sm z-10 translate-x-4 translate-y-4"></div>
+</div>
+</div>
+</section>
+<!-- Feature Grid Below the Fold -->
+<section class="relative max-w-7xl mx-auto px-6 py-16">
+<div class="text-center mb-20 space-y-4">
+<h2 class="text-4xl md:text-5xl font-black font-headline tracking-tight text-on-surface">The Intelligence Layer</h2>
+<p class="text-on-surface-variant max-w-2xl mx-auto font-body">Deep financial forensics combined with elegant interaction design.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<div class="group surface-container-low p-8 rounded-3xl glowing-border hover:surface-container-high hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300">
+<div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl">bar_chart</span>
+</div>
+<h3 class="text-xl font-bold mb-3 font-headline">Visual Dashboard</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6">See your income, expenses, and savings at a glance with charts and a clean summary layout.</p>
+</div>
+<!-- Card 2 -->
+<div class="group surface-container-low p-8 rounded-3xl glowing-border hover:surface-container-high hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300">
+<div class="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-secondary text-3xl">savings</span>
+</div>
+<h3 class="text-xl font-bold mb-3 font-headline">Budget Tracking</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6">Set monthly budgets per category. Progress bars and alerts keep you from overspending.</p>
+</div>
+<!-- Card 3 -->
+<div class="group surface-container-low p-8 rounded-3xl glowing-border hover:surface-container-high hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300">
+<div class="w-14 h-14 rounded-2xl bg-tertiary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-tertiary text-3xl">smart_toy</span>
+</div>
+<h3 class="text-xl font-bold mb-3 font-headline">Spending Predictions</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6">A regression model forecasts next month's expenses by category and flags unusual transactions.</p>
+</div>
+<!-- Card 4 -->
+<div class="group surface-container-low p-8 rounded-3xl glowing-border hover:surface-container-high hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300">
+<div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl">folder</span>
+</div>
+<h3 class="text-xl font-bold mb-3 font-headline">Transaction History</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6">Search, filter, and sort every transaction. Add new entries manually in seconds.</p>
+</div>
+<!-- Card 5 -->
+<div class="group surface-container-low p-8 rounded-3xl glowing-border hover:surface-container-high hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300">
+<div class="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-secondary text-3xl">monitoring</span>
+</div>
+<h3 class="text-xl font-bold mb-3 font-headline">Spending Analytics</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6">Month-over-month comparisons and category breakdowns help you understand your habits.</p>
+</div>
+<!-- Card 6 -->
+<div class="group surface-container-low p-8 rounded-3xl glowing-border hover:surface-container-high hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300">
+<div class="w-14 h-14 rounded-2xl bg-tertiary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-tertiary text-3xl">lock</span>
+</div>
+<h3 class="text-xl font-bold mb-3 font-headline">Secure Accounts</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6">User accounts with hashed passwords and session management keep your data private.</p>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="max-w-7xl mx-auto px-6 mb-32">
+<div class="relative overflow-hidden glass-card rounded-[3rem] p-12 md:p-24 border border-white/5 flex flex-col items-center text-center">
+<div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 pointer-events-none"></div>
+<h2 class="text-4xl md:text-6xl font-black font-headline tracking-tighter mb-8 max-w-3xl">Ready to secure your financial future?</h2>
+<div class="flex flex-col sm:flex-row gap-6">
+<a href="regis.html#register" class="inline-flex items-center justify-center bg-on-surface text-surface px-12 py-5 rounded-full font-bold text-xl active:scale-95 transition-all">
+                        Create account →
+                    </a>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface py-16 border-t border-outline-variant/10">
+<div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-12">
+<div class="col-span-2 md:col-span-1">
+<div class="text-xl font-black text-[#e4e4f9] tracking-tighter mb-6">FinSight</div>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6">Redefining wealth management through the lens of modern design and intelligence.</p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-colors">public</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-colors">chat</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-colors">mail</span>
+</div>
+</div>
+<div>
+<h4 class="font-bold mb-6">Platform</h4>
+<ul class="space-y-4 text-sm text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="dashboard.html">Dashboard</a></li>
+<li><a class="hover:text-primary transition-colors" href="transactions.html">Ledger</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Security</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">API Docs</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-6">Company</h4>
+<ul class="space-y-4 text-sm text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="#">About Us</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Journal</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Privacy</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-6">Support</h4>
+<ul class="space-y-4 text-sm text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="#">Help Center</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Concierge</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Status</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Contact</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-outline-variant/5 text-center text-xs text-on-surface-variant font-label tracking-widest uppercase">
+            © 2026 FinSight Wealth Management Inc. Designed for the Luminescent Vault.
+        </div>
+</footer>
+</body></html>

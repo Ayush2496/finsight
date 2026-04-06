@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transactions – FinSight Vault</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="style.css" />
+  <script src="app.js"></script>
+</head>
+<body class="selection:bg-primary selection:text-black">
+
+<!-- Radial Background -->
+<div class="fixed inset-0 obsidian-radial pointer-events-none z-[-1]"></div>
+
+<div class="flex h-screen overflow-hidden">
+  
+  <!-- Sidebar Navigation -->
+  <aside class="w-64 flex-shrink-0 glass-card border-l-0 border-t-0 border-b-0 hidden md:flex flex-col relative z-20">
+    <div class="p-6">
+      <a href="test.html" class="text-2xl font-black text-on-surface tracking-tighter hover:text-primary transition-colors flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+        FinSight
+      </a>
+    </div>
+    
+    <div class="flex-1 overflow-y-auto px-4 py-4 space-y-8">
+      <div>
+        <span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest ml-4 mb-2 block">Menu</span>
+        <nav class="space-y-1">
+          <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all font-medium">
+            <span class="material-symbols-outlined">dashboard</span>
+            Dashboard
+          </a>
+          <a href="transactions.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-surface-container-high text-primary font-bold transition-all border border-primary/20 shadow-[0_0_15px_rgba(184,132,255,0.1)]">
+            <span class="material-symbols-outlined">receipt_long</span>
+            Transactions
+          </a>
+          <a href="analytics.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all font-medium">
+            <span class="material-symbols-outlined">bar_chart</span>
+            Analytics
+          </a>
+        </nav>
+      </div>
+      
+      <div>
+        <span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest ml-4 mb-2 block">Account</span>
+        <nav class="space-y-1">
+
+          <a href="regis.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:text-error hover:bg-surface-container transition-all font-medium mt-4">
+            <span class="material-symbols-outlined">logout</span>
+            Logout
+          </a>
+        </nav>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 overflow-y-auto relative z-10 w-full">
+    
+    <!-- Top Nav Mobile (Hidden on Desktop) -->
+    <header class="md:hidden flex items-center justify-between p-4 glass-card border-x-0 border-t-0 sticky top-0 z-30">
+        <a href="test.html" class="text-xl font-black text-on-surface tracking-tighter flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+            FinSight
+        </a>
+        <button id="burger" class="text-on-surface-variant p-2">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenu" class="fixed inset-0 bg-surface z-40 hidden flex-col">
+        <div class="flex justify-end p-6">
+             <button class="text-on-surface-variant material-symbols-outlined" onclick="document.getElementById('mobileMenu').classList.add('hidden')">close</button>
+        </div>
+        <div class="flex flex-col items-center gap-6 mt-10">
+            <a href="dashboard.html" class="text-2xl font-bold">Dashboard</a>
+            <a href="transactions.html" class="text-2xl font-bold text-primary">Transactions</a>
+            <a href="analytics.html" class="text-2xl font-bold">Analytics</a>
+            <a href="regis.html" class="text-2xl font-bold text-on-surface-variant">Logout</a>
+        </div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="p-6 md:p-10 max-w-7xl mx-auto space-y-8">
+      
+      <!-- Header -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div>
+          <h1 class="text-3xl md:text-4xl font-black font-headline tracking-tighter">Ledger</h1>
+          <p class="text-on-surface-variant text-sm mt-1">Complete history of your wealth.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <button class="btn-ghost flex items-center gap-2 border border-white/10 hover:border-white/20 transition-all">
+            <span class="material-symbols-outlined text-sm">download</span> Export
+          </button>
+          <button class="btn-primary flex items-center gap-2" data-open="addModal">
+            <span class="material-symbols-outlined text-sm">add</span> Add
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters Row -->
+      <div class="glass-card rounded-2xl p-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+            <input type="search" id="txnSearch" placeholder="Search transactions…" class="w-full bg-surface-container-low border border-outline-variant/30 text-sm focus:border-primary py-2.5 pl-10 pr-4 rounded-xl outline-none" />
+          </div>
+          
+          <select id="filterCat" class="w-full bg-surface-container-low border border-outline-variant/30 text-sm font-semibold text-on-surface-variant py-2.5 px-3 rounded-xl outline-none focus:border-primary">
+            <option value="all">All Categories</option>
+            <option value="Food">Food</option>
+            <option value="Travel">Travel</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Bills">Bills</option>
+            <option value="Income">Income</option>
+          </select>
+          
+          <select id="filterType" class="w-full bg-surface-container-low border border-outline-variant/30 text-sm font-semibold text-on-surface-variant py-2.5 px-3 rounded-xl outline-none focus:border-primary">
+            <option value="all">All Types</option>
+            <option value="income">Credits (+)</option>
+            <option value="expense">Debits (-)</option>
+          </select>
+          
+          <select id="filterSort" class="w-full bg-surface-container-low border border-outline-variant/30 text-sm font-semibold text-on-surface-variant py-2.5 px-3 rounded-xl outline-none focus:border-primary">
+            <option value="date">Newest First</option>
+            <option value="desc">Amount: High to Low</option>
+            <option value="asc">Amount: Low to High</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Table Card -->
+      <div class="glass-card rounded-3xl p-6 relative overflow-hidden">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="font-bold text-lg font-headline">All Transactions</h3>
+          <span id="txnCount" class="text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">0 records</span>
+        </div>
+        
+        <div class="overflow-x-auto">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th style="width: 50px;"></th>
+                <th>Entity</th>
+                <th>Classification</th>
+                <th>Date / Time</th>
+                <th>Amount (₹)</th>
+                <th>Ledger Type</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="txnTableBody">
+              <!-- Injected by app.js -->
+            </tbody>
+          </table>
+        </div>
+        
+        <div id="pagination" class="mt-8 flex justify-center gap-2"></div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Add Modal -->
+<div class="overlay" id="addModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>New Entry</h3>
+      <button class="modal-close" data-close="addModal"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="type-toggle">
+      <div class="type-btn is-expense" data-type="expense">Debit</div>
+      <div class="type-btn" data-type="income">Credit</div>
+    </div>
+    <form id="addTxnForm">
+      <div class="fg">
+        <label>Merchant / Title</label>
+        <input type="text" id="txnName" placeholder="e.g. Zomato" required />
+      </div>
+      <div class="fg">
+        <label>Amount (₹)</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold">₹</span>
+          <input type="number" id="txnAmount" placeholder="0.00" min="0" required class="pl-10!" />
+        </div>
+      </div>
+      <div class="fg">
+        <label>Classification</label>
+        <select id="txnCategory" required>
+          <option value="" disabled selected>Select category</option>
+          <option value="Food">Food & Drink</option>
+          <option value="Travel">Travel</option>
+          <option value="Shopping">Shopping</option>
+          <option value="Bills">Bills & Utilities</option>
+          <option value="Income">Income / Salary</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Date</label>
+        <input type="date" id="txnDate" />
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn-ghost" data-close="addModal">Cancel</button>
+        <button type="submit" class="btn-primary">Record Entry</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="toast"></div>
+</body>
+</html>
