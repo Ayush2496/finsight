@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 3000;
 // origin must exactly match Live Server URL
 // ─────────────────────────────────────────────
 app.use(cors({
-  origin     : 'http://127.0.0.1:5503',
+  origin     : ['http://127.0.0.1:5500','http://127.0.0.1:5503'], // 5503
   credentials: true
 }));
 
