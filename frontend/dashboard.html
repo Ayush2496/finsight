@@ -212,7 +212,7 @@
         <label>Amount (₹)</label>
         <input type="number" id="txnAmount" placeholder="0.00" min="0" required style="padding-left:2rem" />
       </div>
-      <div class="fg">
+      <div class="fg" id="categoryField">
         <label>Classification <span style="color:#a9a9bd;font-weight:400;text-transform:none;letter-spacing:0;font-size:.72rem">(optional — ML auto-classifies)</span></label>
         <select id="txnCategory">
           <option value="">✨ Auto-classify with ML</option>
@@ -225,6 +225,8 @@
           <option value="Healthcare">💊 Healthcare</option>
           <option value="Miscellaneous">💰 Miscellaneous</option>
         </select>
+        <small id="mlHint" style="color:#a9a9bd;font-size:.75rem;margin-top:.25rem;display:block">Leave blank to auto-classify with AI</small>
+        <small id="incomeHint" style="color:#24f07e;font-size:.75rem;margin-top:.25rem;display:none">Income transactions are categorized as Miscellaneous</small>
       </div>
       <div id="mlPreviewBadge" style="display:none;margin-bottom:1rem;padding:.45rem 1rem;border-radius:99px;background:rgba(184,132,255,.1);border:1px solid rgba(184,132,255,.2);font-size:.78rem;color:#b884ff;font-weight:600;"></div>
       <div class="fg">

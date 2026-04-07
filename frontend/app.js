@@ -370,13 +370,38 @@ async function initDashboardPage() {
 
   // Type toggle
   let currentType = 'expense';
+
+  function updateCategoryVisibility(type) {
+    const catField   = document.getElementById('categoryField');
+    const mlHint     = document.getElementById('mlHint');
+    const incomeHint = document.getElementById('incomeHint');
+    const catSelect  = document.getElementById('txnCategory');
+    if (!catField) return;
+    if (type === 'income') {
+      catField.style.opacity  = '0.5';
+      catField.style.pointerEvents = 'none';
+      if (catSelect) catSelect.value = '';
+      if (mlHint)     mlHint.style.display     = 'none';
+      if (incomeHint) incomeHint.style.display  = 'block';
+    } else {
+      catField.style.opacity  = '1';
+      catField.style.pointerEvents = 'auto';
+      if (mlHint)     mlHint.style.display     = 'block';
+      if (incomeHint) incomeHint.style.display  = 'none';
+    }
+  }
+
   document.querySelectorAll('.type-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       currentType = btn.dataset.type;
       document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('is-expense','is-income'));
       btn.classList.add(currentType==='expense'?'is-expense':'is-income');
+      updateCategoryVisibility(currentType);
     });
   });
+
+  // Initialize on page load
+  updateCategoryVisibility(currentType);
 
   // ML preview — show predicted category as user types description
   let mlPreviewTimer;
@@ -533,30 +558,63 @@ async function initTransactionsPage() {
   document.querySelectorAll('[data-close]').forEach(btn => btn.addEventListener('click',  () => closeModal(btn.dataset.close)));
 
   let currentType = 'expense';
+
+  function updateCategoryVisibility(type) {
+    const catField   = document.getElementById('categoryField');
+    const mlHint     = document.getElementById('mlHint');
+    const incomeHint = document.getElementById('incomeHint');
+    const catSelect  = document.getElementById('txnCategory');
+    if (!catField) return;
+    if (type === 'income') {
+      catField.style.opacity  = '0.5';
+      catField.style.pointerEvents = 'none';
+      if (catSelect) catSelect.value = '';
+      if (mlHint)     mlHint.style.display     = 'none';
+      if (incomeHint) incomeHint.style.display  = 'block';
+    } else {
+      catField.style.opacity  = '1';
+      catField.style.pointerEvents = 'auto';
+      if (mlHint)     mlHint.style.display     = 'block';
+      if (incomeHint) incomeHint.style.display  = 'none';
+    }
+  }
+
   document.querySelectorAll('.type-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       currentType = btn.dataset.type;
       document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('is-expense','is-income'));
       btn.classList.add(currentType==='expense'?'is-expense':'is-income');
+      updateCategoryVisibility(currentType);
     });
   });
+
+  // Initialize visibility on page load
+  updateCategoryVisibility(currentType);
 
   document.getElementById('addTxnForm')?.addEventListener('submit', async e => {
     e.preventDefault();
     const description = document.getElementById('txnName').value.trim();
     const amount      = document.getElementById('txnAmount').value;
     const date        = document.getElementById('txnDate').value || new Date().toISOString().split('T')[0];
+    // For income, send empty category so backend defaults to Miscellaneous
+    const category    = currentType === 'income' ? '' : (document.getElementById('txnCategory')?.value || '');
     const btn         = e.target.querySelector('.btn-primary');
-    btn.textContent = 'Saving...'; btn.disabled = true;
+
+    if (!description || !amount) { toast('Fill in description and amount.', true); return; }
+
+    btn.textContent = category ? 'Saving...' : (currentType === 'income' ? 'Saving...' : 'Classifying with ML...');
+    btn.disabled = true;
 
     const { ok, data } = await apiFetch('/transactions/add', {
-      method:'POST', body: JSON.stringify({ description, amount, date, type:currentType })
+      method:'POST', body: JSON.stringify({ description, amount, date, type:currentType, category })
     });
 
     btn.textContent = 'Record Entry'; btn.disabled = false;
     if (ok) {
       closeModal('addModal'); e.target.reset();
-      toast(`✅ Added · ${data.transaction.category} (${data.transaction.ml_confidence} confidence)`);
+      updateCategoryVisibility('expense'); // reset to expense defaults
+      const conf = data.transaction.ml_confidence === 'manual' ? 'manual' : `ML: ${data.transaction.ml_confidence}`;
+      toast(`✅ Added · ${data.transaction.category} (${conf})`);
       await loadTransactions();
     } else {
       toast(data.error || 'Failed to add.', true);

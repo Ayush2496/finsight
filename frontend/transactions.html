@@ -192,17 +192,21 @@
           <input type="number" id="txnAmount" placeholder="0.00" min="0" required class="pl-10!" />
         </div>
       </div>
-      <div class="fg">
+      <div class="fg" id="categoryField">
         <label>Classification</label>
-        <select id="txnCategory" required>
-          <option value="" disabled selected>Select category</option>
+        <select id="txnCategory">
+          <option value="">Auto-classify with ML</option>
           <option value="Food">Food & Drink</option>
           <option value="Travel">Travel</option>
           <option value="Shopping">Shopping</option>
           <option value="Bills">Bills & Utilities</option>
-          <option value="Income">Income / Salary</option>
-          <option value="Other">Other</option>
+          <option value="Entertainment">Entertainment</option>
+          <option value="Groceries">Groceries</option>
+          <option value="Healthcare">Healthcare</option>
+          <option value="Miscellaneous">Miscellaneous</option>
         </select>
+        <small id="mlHint" style="color:#a9a9bd;font-size:.75rem;margin-top:.25rem;display:block">Leave blank to auto-classify with AI</small>
+        <small id="incomeHint" style="color:#24f07e;font-size:.75rem;margin-top:.25rem;display:none">Income transactions are categorized as Miscellaneous</small>
       </div>
       <div class="fg">
         <label>Date</label>
