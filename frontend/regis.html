@@ -1,109 +1,500 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="en"><head>
+<html class="dark" lang="en" ng-app="finsightApp">
+<head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FinSight | Access Vault</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="style.css" />
-  <script src="app.js"></script>
+<script src="app.js"></script>
+<!-- AngularJS 1.8.3 -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+<style>
+  .ng-field-error {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    margin-top: 0.35rem;
+    padding-left: 0.25rem;
+    color: #fd6f85;
+    animation: slideIn 0.18s ease;
+  }
+  .ng-field-success {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    margin-top: 0.35rem;
+    padding-left: 0.25rem;
+    color: #24f07e;
+    animation: slideIn 0.18s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Password strength bar */
+  .pw-strength-wrap {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+    padding-left: 2px;
+  }
+  .pw-strength-bar {
+    flex: 1;
+    height: 3px;
+    border-radius: 99px;
+    background: rgba(255,255,255,0.08);
+    transition: background 0.3s ease;
+  }
+  .pw-strength-bar.weak   { background: #fd6f85; }
+  .pw-strength-bar.medium { background: #f7c56e; }
+  .pw-strength-bar.strong { background: #24f07e; }
+
+  .pw-strength-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 4px;
+    padding-left: 2px;
+  }
+  .pw-strength-label.weak   { color: #fd6f85; }
+  .pw-strength-label.medium { color: #f7c56e; }
+  .pw-strength-label.strong { color: #24f07e; }
+
+  /* Input border glow on error */
+  .input-error-ring .input-glow {
+    box-shadow: 0 0 0 1.5px #fd6f8566;
+  }
+  .input-success-ring .input-glow {
+    box-shadow: 0 0 0 1.5px #24f07e44;
+  }
+
+  /* Toast */
+  #ng-toast {
+    position: fixed;
+    top: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.7rem 1.5rem;
+    border-radius: 99px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    z-index: 9999;
+    display: none;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    font-family: 'Lexend', sans-serif;
+    pointer-events: none;
+  }
+
+  /* Animate auth tab active underline */
+  .auth-tab-active {
+    background: rgba(255,255,255,0.06) !important;
+    color: #b884ff !important;
+  }
+
+  /* Loading spinner inside button */
+  .btn-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(0,0,0,0.3);
+    border-top-color: #000;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
 </head>
-<body class="text-on-surface overflow-x-hidden overflow-y-auto min-h-screen flex items-center justify-center py-10">
+<body class="text-on-surface overflow-x-hidden overflow-y-auto min-h-screen flex items-center justify-center py-10"
+      ng-controller="AuthController">
+
+<div id="ng-toast"></div>
 <div class="fixed inset-0 obsidian-pulse-glow pointer-events-none"></div>
 <div class="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary/10 blur-[120px] rounded-full pointer-events-none"></div>
 <div class="fixed bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-secondary/5 blur-[150px] rounded-full pointer-events-none"></div>
+
 <main class="relative z-10 w-full max-w-[440px] px-6 my-6">
-<div class="flex flex-col items-center mb-10">
-<div class="w-16 h-16 bg-surface-container-highest rounded-2xl flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(149,71,247,0.2)] border border-primary/20">
-<span class="material-symbols-outlined text-4xl text-primary" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
-</div>
-<h1 class="text-3xl font-black text-on-surface tracking-tighter">FinSight</h1>
-<p class="text-on-surface-variant text-sm mt-1 font-medium">Digital Curator of Wealth</p>
-</div>
-<div class="glass-vault rounded-[2.5rem] p-8 shadow-2xl relative group">
-<div class="absolute -top-4 -right-4 w-24 h-24 bg-tertiary/10 blur-2xl rounded-full pointer-events-none opacity-50"></div>
-<div class="flex p-1 bg-surface-container-lowest rounded-full mb-8">
-<button class="auth-tab flex-1 py-2 text-sm font-semibold rounded-full bg-surface-container-high text-primary transition-all duration-300" data-target="login-panel" type="button">Login</button>
-<button class="auth-tab flex-1 py-2 text-sm font-semibold rounded-full text-on-surface-variant hover:text-on-surface transition-all duration-300" data-target="register-panel" type="button">Register</button>
-</div>
-<form action="#" class="auth-panel space-y-6" id="login-panel">
-<div class="space-y-2">
-<label class="block text-xs font-bold text-on-surface-variant tracking-widest px-1 uppercase">Access Identity</label>
-<div class="relative flex items-center group/input input-glow transition-all duration-300 rounded-2xl bg-surface-container-lowest">
-<span class="material-symbols-outlined absolute left-4 text-on-surface-variant group-focus-within/input:text-primary transition-colors">mail</span>
-<input class="w-full bg-transparent border-none py-4 pl-12 pr-4 text-on-surface placeholder:text-outline focus:ring-0 rounded-2xl font-medium" placeholder="enter your email" type="email"/>
-</div>
-</div>
-<div class="space-y-2">
-<div class="flex justify-between items-center px-1">
-<label class="text-xs font-bold text-on-surface-variant tracking-widest uppercase">Encryption Key</label>
-</div>
-<div class="relative flex items-center group/input input-glow transition-all duration-300 rounded-2xl bg-surface-container-lowest">
-<span class="material-symbols-outlined absolute left-4 text-on-surface-variant group-focus-within/input:text-primary transition-colors">lock</span>
-<input class="w-full bg-transparent border-none py-4 pl-12 pr-12 text-on-surface placeholder:text-outline focus:ring-0 rounded-2xl font-medium" placeholder="Password" type="password"/>
-<button aria-label="Show password" class="password-toggle absolute right-4 text-on-surface-variant hover:text-on-surface transition-colors" type="button">
-<span class="material-symbols-outlined">visibility</span>
-</button>
-</div>
-</div>
-<button type="submit" class="w-full mt-4 py-4 px-6 rounded-full bg-gradient-to-r from-primary-container to-primary text-on-primary-container font-black text-sm tracking-wide shadow-[0_8px_30px_rgba(157,80,255,0.3)] hover:shadow-[0_8px_40px_rgba(157,80,255,0.5)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2">
-                    Authorize Access
-                    <span class="material-symbols-outlined text-lg">shield_with_heart</span>
-</button>
-</form>
-<form action="#" class="auth-panel space-y-6" hidden id="register-panel">
-<div class="space-y-2">
-<label class="block text-xs font-bold text-on-surface-variant tracking-widest px-1 uppercase">Full Name</label>
-<div class="relative flex items-center group/input input-glow transition-all duration-300 rounded-2xl bg-surface-container-lowest">
-<span class="material-symbols-outlined absolute left-4 text-on-surface-variant group-focus-within/input:text-primary transition-colors">person</span>
-<input class="w-full bg-transparent border-none py-4 pl-12 pr-4 text-on-surface placeholder:text-outline focus:ring-0 rounded-2xl font-medium" placeholder="enter your full name" type="text"/>
-</div>
-</div>
-<div class="space-y-2">
-<label class="block text-xs font-bold text-on-surface-variant tracking-widest px-1 uppercase">Email Address</label>
-<div class="relative flex items-center group/input input-glow transition-all duration-300 rounded-2xl bg-surface-container-lowest">
-<span class="material-symbols-outlined absolute left-4 text-on-surface-variant group-focus-within/input:text-primary transition-colors">mail</span>
-<input class="w-full bg-transparent border-none py-4 pl-12 pr-4 text-on-surface placeholder:text-outline focus:ring-0 rounded-2xl font-medium" placeholder="enter your email" type="email"/>
-</div>
-</div>
-<div class="space-y-2">
-<label class="block text-xs font-bold text-on-surface-variant tracking-widest px-1 uppercase">Create Password</label>
-<div class="relative flex items-center group/input input-glow transition-all duration-300 rounded-2xl bg-surface-container-lowest">
-<span class="material-symbols-outlined absolute left-4 text-on-surface-variant group-focus-within/input:text-primary transition-colors">lock</span>
-<input class="w-full bg-transparent border-none py-4 pl-12 pr-12 text-on-surface placeholder:text-outline focus:ring-0 rounded-2xl font-medium" placeholder="Create a secure password" type="password"/>
-<button aria-label="Show password" class="password-toggle absolute right-4 text-on-surface-variant hover:text-on-surface transition-colors" type="button">
-<span class="material-symbols-outlined">visibility</span>
-</button>
-</div>
-</div>
-<div class="space-y-2">
-<label class="block text-xs font-bold text-on-surface-variant tracking-widest px-1 uppercase">Confirm Password</label>
-<div class="relative flex items-center group/input input-glow transition-all duration-300 rounded-2xl bg-surface-container-lowest">
-<span class="material-symbols-outlined absolute left-4 text-on-surface-variant group-focus-within/input:text-primary transition-colors">verified_user</span>
-<input class="w-full bg-transparent border-none py-4 pl-12 pr-12 text-on-surface placeholder:text-outline focus:ring-0 rounded-2xl font-medium" placeholder="Confirm your password" type="password"/>
-<button aria-label="Show password" class="password-toggle absolute right-4 text-on-surface-variant hover:text-on-surface transition-colors" type="button">
-<span class="material-symbols-outlined">visibility</span>
-</button>
-</div>
-</div>
-<button class="w-full mt-4 py-4 px-6 rounded-full bg-gradient-to-r from-primary-container to-primary text-on-primary-container font-black text-sm tracking-wide shadow-[0_8px_30px_rgba(157,80,255,0.3)] hover:shadow-[0_8px_40px_rgba(157,80,255,0.5)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2" type="submit">
-                    Create Account
-                    <span class="material-symbols-outlined text-lg">person_add</span>
-</button>
-</form>
-</div>
-<footer class="mt-12 text-center">
-<p class="text-[11px] text-on-surface-variant/60 font-medium leading-relaxed">
-                By accessing the vault, you agree to our 
-                <a class="text-on-surface-variant hover:text-on-surface underline underline-offset-4 decoration-primary/30 transition-colors" href="#">Protocol Standards</a> 
-                and 
-                <a class="text-on-surface-variant hover:text-on-surface underline underline-offset-4 decoration-primary/30 transition-colors" href="#">Privacy Encryption</a>.
-            </p>
-</footer>
+
+  <!-- Logo -->
+  <div class="flex flex-col items-center mb-10">
+    <div class="w-16 h-16 bg-surface-container-highest rounded-2xl flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(149,71,247,0.2)] border border-primary/20">
+      <span class="material-symbols-outlined text-4xl text-primary" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+    </div>
+    <h1 class="text-3xl font-black text-on-surface tracking-tighter">FinSight</h1>
+    <p class="text-on-surface-variant text-sm mt-1 font-medium">Digital Curator of Wealth</p>
+  </div>
+
+  <!-- Card -->
+  <div class="glass-vault rounded-[2.5rem] p-8 shadow-2xl relative group">
+    <div class="absolute -top-4 -right-4 w-24 h-24 bg-tertiary/10 blur-2xl rounded-full pointer-events-none opacity-50"></div>
+
+    <!-- Tab switcher -->
+    <div class="flex p-1 bg-surface-container-lowest rounded-full mb-8">
+      <button type="button"
+              class="auth-tab flex-1 py-2 text-sm font-semibold rounded-full transition-all duration-300"
+              ng-class="activeTab === 'login' ? 'auth-tab-active' : 'text-on-surface-variant hover:text-on-surface'"
+              ng-click="setTab('login')">
+        Login
+      </button>
+      <button type="button"
+              class="auth-tab flex-1 py-2 text-sm font-semibold rounded-full transition-all duration-300"
+              ng-class="activeTab === 'register' ? 'auth-tab-active' : 'text-on-surface-variant hover:text-on-surface'"
+              ng-click="setTab('register')">
+        Register
+      </button>
+    </div>
+
+    <!-- ─── LOGIN PANEL ───────────────────────────────────────── -->
+    <form ng-show="activeTab === 'login'" ng-submit="submitLogin()" novalidate class="space-y-6">
+
+      <!-- Email -->
+      <div class="space-y-1">
+        <label class="block text-xs font-bold text-on-surface-variant tracking-widest px-1 uppercase">Access Identity</label>
+        <div class="relative flex items-center input-glow transition-all duration-300 rounded-2xl bg-surface-container-lowest"
+             ng-class="loginSubmitted && !login.email ? 'input-error-ring' : ''">
+          <span class="material-symbols-outlined absolute left-4 text-on-surface-variant">mail</span>
+          <input class="w-full bg-transparent border-none py-4 pl-12 pr-4 text-on-surface placeholder:text-outline focus:ring-0 rounded-2xl font-medium"
+                 type="email"
+                 placeholder="enter your email"
+                 ng-model="login.email"
+                 required/>
+        </div>
+        <p class="ng-field-error" ng-show="loginSubmitted && !login.email">
+          <span class="material-symbols-outlined" style="font-size:13px">error</span> Email is required
+        </p>
+      </div>
+
+      <!-- Password -->
+      <div class="space-y-1">
+        <label class="block text-xs font-bold text-on-surface-variant tracking-widest px-1 uppercase">Encryption Key</label>
+        <div class="relative flex items-center input-glow transition-all duration-300 rounded-2xl bg-surface-container-lowest"
+             ng-class="loginSubmitted && !login.password ? 'input-error-ring' : ''">
+          <span class="material-symbols-outlined absolute left-4 text-on-surface-variant">lock</span>
+          <input class="w-full bg-transparent border-none py-4 pl-12 pr-12 text-on-surface placeholder:text-outline focus:ring-0 rounded-2xl font-medium"
+                 ng-attr-type="{{showLoginPw ? 'text' : 'password'}}"
+                 placeholder="Password"
+                 ng-model="login.password"
+                 required/>
+          <button type="button" class="absolute right-4 text-on-surface-variant hover:text-on-surface transition-colors" ng-click="showLoginPw = !showLoginPw">
+            <span class="material-symbols-outlined">{{showLoginPw ? 'visibility_off' : 'visibility'}}</span>
+          </button>
+        </div>
+        <p class="ng-field-error" ng-show="loginSubmitted && !login.password">
+          <span class="material-symbols-outlined" style="font-size:13px">error</span> Password is required
+        </p>
+      </div>
+
+      <!-- Server error -->
+      <p class="ng-field-error" ng-show="loginError">
+        <span class="material-symbols-outlined" style="font-size:13px">error</span> {{loginError}}
+      </p>
+
+      <!-- Submit -->
+      <button type="submit"
+              class="w-full mt-4 py-4 px-6 rounded-full bg-gradient-to-r from-primary-container to-primary text-on-primary-container font-black text-sm tracking-wide shadow-[0_8px_30px_rgba(157,80,255,0.3)] hover:shadow-[0_8px_40px_rgba(157,80,255,0.5)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2"
+              ng-disabled="loginLoading">
+        <span class="btn-spinner" ng-show="loginLoading"></span>
+        {{loginLoading ? 'Signing in...' : 'Authorize Access'}}
+        <span class="material-symbols-outlined text-lg" ng-hide="loginLoading">shield_with_heart</span>
+      </button>
+    </form>
+
+    <!-- ─── REGISTER PANEL ────────────────────────────────────── -->
+    <form ng-show="activeTab === 'register'" ng-submit="submitRegister()" novalidate class="space-y-5">
+
+      <!-- Full Name -->
+      <div class="space-y-1">
+        <label class="block text-xs font-bold text-on-surface-variant tracking-widest px-1 uppercase">Full Name</label>
+        <div class="relative flex items-center input-glow transition-all duration-300 rounded-2xl bg-surface-container-lowest"
+             ng-class="regSubmitted && !reg.name ? 'input-error-ring' : (reg.name ? 'input-success-ring' : '')">
+          <span class="material-symbols-outlined absolute left-4 text-on-surface-variant">person</span>
+          <input class="w-full bg-transparent border-none py-4 pl-12 pr-4 text-on-surface placeholder:text-outline focus:ring-0 rounded-2xl font-medium"
+                 type="text"
+                 placeholder="enter your full name"
+                 ng-model="reg.name"
+                 required/>
+        </div>
+        <p class="ng-field-error" ng-show="regSubmitted && !reg.name">
+          <span class="material-symbols-outlined" style="font-size:13px">error</span> Name is required
+        </p>
+      </div>
+
+      <!-- Email -->
+      <div class="space-y-1">
+        <label class="block text-xs font-bold text-on-surface-variant tracking-widest px-1 uppercase">Email Address</label>
+        <div class="relative flex items-center input-glow transition-all duration-300 rounded-2xl bg-surface-container-lowest"
+             ng-class="regSubmitted && !isValidEmail(reg.email) ? 'input-error-ring' : (isValidEmail(reg.email) ? 'input-success-ring' : '')">
+          <span class="material-symbols-outlined absolute left-4 text-on-surface-variant">mail</span>
+          <input class="w-full bg-transparent border-none py-4 pl-12 pr-4 text-on-surface placeholder:text-outline focus:ring-0 rounded-2xl font-medium"
+                 type="email"
+                 placeholder="enter your email"
+                 ng-model="reg.email"
+                 required/>
+        </div>
+        <p class="ng-field-error" ng-show="regSubmitted && !reg.email">
+          <span class="material-symbols-outlined" style="font-size:13px">error</span> Email is required
+        </p>
+        <p class="ng-field-error" ng-show="regSubmitted && reg.email && !isValidEmail(reg.email)">
+          <span class="material-symbols-outlined" style="font-size:13px">error</span> Please enter a valid email address
+        </p>
+      </div>
+
+      <!-- Password -->
+      <div class="space-y-1">
+        <label class="block text-xs font-bold text-on-surface-variant tracking-widest px-1 uppercase">Create Password</label>
+        <div class="relative flex items-center input-glow transition-all duration-300 rounded-2xl bg-surface-container-lowest"
+             ng-class="regSubmitted && !isPasswordValid(reg.password) ? 'input-error-ring' : (isPasswordValid(reg.password) ? 'input-success-ring' : '')">
+          <span class="material-symbols-outlined absolute left-4 text-on-surface-variant">lock</span>
+          <input class="w-full bg-transparent border-none py-4 pl-12 pr-12 text-on-surface placeholder:text-outline focus:ring-0 rounded-2xl font-medium"
+                 ng-attr-type="{{showRegPw ? 'text' : 'password'}}"
+                 placeholder="Create a secure password"
+                 ng-model="reg.password"
+                 required/>
+          <button type="button" class="absolute right-4 text-on-surface-variant hover:text-on-surface transition-colors" ng-click="showRegPw = !showRegPw">
+            <span class="material-symbols-outlined">{{showRegPw ? 'visibility_off' : 'visibility'}}</span>
+          </button>
+        </div>
+
+        <!-- Password strength bars -->
+        <div class="pw-strength-wrap" ng-show="reg.password">
+          <div class="pw-strength-bar" ng-class="pwStrengthClass(reg.password, 1)"></div>
+          <div class="pw-strength-bar" ng-class="pwStrengthClass(reg.password, 2)"></div>
+          <div class="pw-strength-bar" ng-class="pwStrengthClass(reg.password, 3)"></div>
+        </div>
+        <p class="pw-strength-label" ng-class="pwStrengthLabel(reg.password).cls" ng-show="reg.password">
+          {{pwStrengthLabel(reg.password).text}}
+        </p>
+
+        <!-- Inline rule hints -->
+        <div ng-show="reg.password" style="margin-top:6px; display:flex; flex-direction:column; gap:3px;">
+          <p ng-class="reg.password.length >= 6 ? 'ng-field-success' : 'ng-field-error'" style="margin-top:0">
+            <span class="material-symbols-outlined" style="font-size:13px">{{reg.password.length >= 6 ? 'check_circle' : 'cancel'}}</span>
+            At least 6 characters
+          </p>
+          <p ng-class="hasLetter(reg.password) ? 'ng-field-success' : 'ng-field-error'" style="margin-top:0">
+            <span class="material-symbols-outlined" style="font-size:13px">{{hasLetter(reg.password) ? 'check_circle' : 'cancel'}}</span>
+            At least one letter (a–z / A–Z)
+          </p>
+        </div>
+
+        <!-- Error on submit -->
+        <p class="ng-field-error" ng-show="regSubmitted && !reg.password">
+          <span class="material-symbols-outlined" style="font-size:13px">error</span> Password is required
+        </p>
+        <p class="ng-field-error" ng-show="regSubmitted && reg.password && !isPasswordValid(reg.password)">
+          <span class="material-symbols-outlined" style="font-size:13px">error</span> Password must be ≥6 chars and contain a letter
+        </p>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="space-y-1">
+        <label class="block text-xs font-bold text-on-surface-variant tracking-widest px-1 uppercase">Confirm Password</label>
+        <div class="relative flex items-center input-glow transition-all duration-300 rounded-2xl bg-surface-container-lowest"
+             ng-class="regSubmitted && reg.password !== reg.confirm ? 'input-error-ring' : (reg.confirm && reg.password === reg.confirm ? 'input-success-ring' : '')">
+          <span class="material-symbols-outlined absolute left-4 text-on-surface-variant">verified_user</span>
+          <input class="w-full bg-transparent border-none py-4 pl-12 pr-12 text-on-surface placeholder:text-outline focus:ring-0 rounded-2xl font-medium"
+                 ng-attr-type="{{showConfirmPw ? 'text' : 'password'}}"
+                 placeholder="Confirm your password"
+                 ng-model="reg.confirm"
+                 required/>
+          <button type="button" class="absolute right-4 text-on-surface-variant hover:text-on-surface transition-colors" ng-click="showConfirmPw = !showConfirmPw">
+            <span class="material-symbols-outlined">{{showConfirmPw ? 'visibility_off' : 'visibility'}}</span>
+          </button>
+        </div>
+        <p class="ng-field-success" ng-show="reg.confirm && reg.password === reg.confirm">
+          <span class="material-symbols-outlined" style="font-size:13px">check_circle</span> Passwords match
+        </p>
+        <p class="ng-field-error" ng-show="regSubmitted && reg.confirm && reg.password !== reg.confirm">
+          <span class="material-symbols-outlined" style="font-size:13px">error</span> Passwords do not match
+        </p>
+        <p class="ng-field-error" ng-show="regSubmitted && !reg.confirm">
+          <span class="material-symbols-outlined" style="font-size:13px">error</span> Please confirm your password
+        </p>
+      </div>
+
+      <!-- Server error -->
+      <p class="ng-field-error" ng-show="regError">
+        <span class="material-symbols-outlined" style="font-size:13px">error</span> {{regError}}
+      </p>
+
+      <!-- Submit -->
+      <button type="submit"
+              class="w-full mt-4 py-4 px-6 rounded-full bg-gradient-to-r from-primary-container to-primary text-on-primary-container font-black text-sm tracking-wide shadow-[0_8px_30px_rgba(157,80,255,0.3)] hover:shadow-[0_8px_40px_rgba(157,80,255,0.5)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2"
+              ng-disabled="regLoading">
+        <span class="btn-spinner" ng-show="regLoading"></span>
+        {{regLoading ? 'Creating account...' : 'Create Account'}}
+        <span class="material-symbols-outlined text-lg" ng-hide="regLoading">person_add</span>
+      </button>
+    </form>
+
+  </div><!-- /card -->
+
+  <footer class="mt-12 text-center">
+    <p class="text-[11px] text-on-surface-variant/60 font-medium leading-relaxed">
+      By accessing the vault, you agree to our
+      <a class="text-on-surface-variant hover:text-on-surface underline underline-offset-4 decoration-primary/30 transition-colors" href="#">Protocol Standards</a>
+      and
+      <a class="text-on-surface-variant hover:text-on-surface underline underline-offset-4 decoration-primary/30 transition-colors" href="#">Privacy Encryption</a>.
+    </p>
+  </footer>
+
 </main>
+
 <div class="fixed -bottom-24 -right-24 w-96 h-96 opacity-20 blur-sm mix-blend-screen pointer-events-none select-none">
-<img alt="abstract digital geometry" class="w-full h-full object-contain" data-alt="abstract floating glass crystalline structure with iridescent purple and blue light refractions against a deep black void" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADWdA1MUI6Lz4ay6sCSi0RgWOxCTv9mhSuJbRukuiIVU26qXORuDm-SDtuVxHiyWolzJ-kj6viT9cYPnjhiAwWgkbcvNzOtP_ICEbO7HVH4gix2xXVTwEhS9vQ2Koob6QLwf798xCS5PYlGhtHgQiBOLlv3GXzxWNWWXG59_QTCt3Ady2WV18Dsp7EQfViDhnVCl3mOpNENeOjbfILFV2Pkk0dkiSV9YDYcLtyzXWuo8LXyhIMCVJho4k7seQPz16ZVsM6NVugUkt1"/>
+  <img alt="abstract digital geometry" class="w-full h-full object-contain"
+       src="https://lh3.googleusercontent.com/aida-public/AB6AXuADWdA1MUI6Lz4ay6sCSi0RgWOxCTv9mhSuJbRukuiIVU26qXORuDm-SDtuVxHiyWolzJ-kj6viT9cYPnjhiAwWgkbcvNzOtP_ICEbO7HVH4gix2xXVTwEhS9vQ2Koob6QLwf798xCS5PYlGhtHgQiBOLlv3GXzxWNWWXG59_QTCt3Ady2WV18Dsp7EQfViDhnVCl3mOpNENeOjbfILFV2Pkk0dkiSV9YDYcLtyzXWuo8LXyhIMCVJho4k7seQPz16ZVsM6NVugUkt1"/>
 </div>
-</body></html>
+
+<!-- AngularJS Controller — defined AFTER angular.min.js is loaded -->
+<script>
+angular.module('finsightApp', [])
+  .controller('AuthController', ['$scope', '$http', function($scope, $http) {
+
+    var API = 'http://127.0.0.1:3000/api';
+
+    // ── Tab state ──────────────────────────────────────────────
+    $scope.activeTab = window.location.hash === '#register' ? 'register' : 'login';
+    $scope.setTab = function(tab) {
+      $scope.activeTab    = tab;
+      $scope.loginError   = '';
+      $scope.regError     = '';
+      $scope.loginSubmitted = false;
+      $scope.regSubmitted   = false;
+    };
+
+    // ── Login model ────────────────────────────────────────────
+    $scope.login        = { email: '', password: '' };
+    $scope.loginLoading = false;
+    $scope.loginError   = '';
+    $scope.loginSubmitted = false;
+    $scope.showLoginPw  = false;
+
+    // ── Register model ─────────────────────────────────────────
+    $scope.reg         = { name: '', email: '', password: '', confirm: '' };
+    $scope.regLoading  = false;
+    $scope.regError    = '';
+    $scope.regSubmitted  = false;
+    $scope.showRegPw   = false;
+    $scope.showConfirmPw = false;
+
+    // ── Helpers ────────────────────────────────────────────────
+    $scope.isValidEmail = function(email) {
+      if (!email) return false;
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
+
+    $scope.hasLetter = function(pw) {
+      if (!pw) return false;
+      return /[a-zA-Z]/.test(pw);
+    };
+
+    $scope.isPasswordValid = function(pw) {
+      if (!pw) return false;
+      return pw.length >= 6 && /[a-zA-Z]/.test(pw);
+    };
+
+    // Password strength scoring
+    function pwScore(pw) {
+      if (!pw) return 0;
+      var score = 0;
+      if (pw.length >= 6)  score++;
+      if (pw.length >= 10) score++;
+      if (/[a-zA-Z]/.test(pw)) score++;
+      if (/[0-9]/.test(pw))    score++;
+      if (/[^a-zA-Z0-9]/.test(pw)) score++;
+      return score; // 0–5
+    }
+
+    $scope.pwStrengthClass = function(pw, bar) {
+      var s = pwScore(pw);
+      var level = s <= 2 ? 'weak' : s <= 3 ? 'medium' : 'strong';
+      if (bar === 1) return level;
+      if (bar === 2) return s >= 3 ? level : '';
+      if (bar === 3) return s >= 5 ? level : '';
+      return '';
+    };
+
+    $scope.pwStrengthLabel = function(pw) {
+      var s = pwScore(pw);
+      if (!pw) return { text: '', cls: '' };
+      if (s <= 2) return { text: 'Weak',   cls: 'weak' };
+      if (s <= 3) return { text: 'Medium', cls: 'medium' };
+      return      { text: 'Strong',  cls: 'strong' };
+    };
+
+    // ── Toast helper ───────────────────────────────────────────
+    function ngToast(msg, isError) {
+      var el = document.getElementById('ng-toast');
+      if (!el) return;
+      el.textContent      = msg;
+      el.style.display    = 'block';
+      el.style.background = isError ? '#fd6f85' : '#24f07e';
+      el.style.color      = isError ? '#490013' : '#004820';
+      setTimeout(function() { el.style.display = 'none'; }, 3500);
+    }
+
+    // ── Submit: Login ──────────────────────────────────────────
+    $scope.submitLogin = function() {
+      $scope.loginSubmitted = true;
+      $scope.loginError = '';
+
+      if (!$scope.login.email || !$scope.login.password) return;
+
+      $scope.loginLoading = true;
+
+      $http.post(API + '/auth/login', {
+        email:    $scope.login.email.trim(),
+        password: $scope.login.password
+      }, { withCredentials: true })
+      .then(function(res) {
+        window.location.href = 'dashboard.html';
+      })
+      .catch(function(err) {
+        $scope.loginLoading = false;
+        $scope.loginError = (err.data && err.data.error) || 'Login failed. Check your credentials.';
+      });
+    };
+
+    // ── Submit: Register ───────────────────────────────────────
+    $scope.submitRegister = function() {
+      $scope.regSubmitted = true;
+      $scope.regError = '';
+
+      // Client-side validation
+      if (!$scope.reg.name)                       return;
+      if (!$scope.isValidEmail($scope.reg.email)) return;
+      if (!$scope.isPasswordValid($scope.reg.password)) return;
+      if ($scope.reg.password !== $scope.reg.confirm)   return;
+
+      $scope.regLoading = true;
+
+      $http.post(API + '/auth/register', {
+        name:     $scope.reg.name.trim(),
+        email:    $scope.reg.email.trim(),
+        password: $scope.reg.password
+      }, { withCredentials: true })
+      .then(function(res) {
+        window.location.href = 'dashboard.html';
+      })
+      .catch(function(err) {
+        $scope.regLoading = false;
+        $scope.regError = (err.data && err.data.error) || 'Registration failed. Please try again.';
+      });
+    };
+
+  }]);
+</script>
+
+</body>
+</html>

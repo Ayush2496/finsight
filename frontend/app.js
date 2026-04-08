@@ -120,90 +120,6 @@ function mkChart(id, type, data, opts = {}) {
     }
   });
 }
-
-// ══════════════════════════════════════════════════════════════════════════
-// PAGE: regis.html
-// ══════════════════════════════════════════════════════════════════════════
-function initRegisPage() {
-  const tabs   = document.querySelectorAll('.auth-tab');
-  const panels = document.querySelectorAll('.auth-panel');
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(b => {
-        const on = b === tab;
-        b.classList.toggle('bg-surface-container-high', on);
-        b.classList.toggle('text-primary', on);
-        b.classList.toggle('text-on-surface-variant', !on);
-      });
-      panels.forEach(p => { p.hidden = p.id !== tab.dataset.target; });
-    });
-  });
-
-  if (window.location.hash === '#register') {
-    document.querySelector('.auth-tab[data-target="register-panel"]')?.click();
-  }
-
-  document.querySelectorAll('.password-toggle').forEach(toggle => {
-    toggle.addEventListener('click', () => {
-      const input = toggle.parentElement.querySelector('input');
-      const icon  = toggle.querySelector('.material-symbols-outlined');
-      const isPw  = input.type === 'password';
-      input.type       = isPw ? 'text' : 'password';
-      icon.textContent = isPw ? 'visibility_off' : 'visibility';
-    });
-  });
-
-  // Login
-  document.getElementById('login-panel')?.addEventListener('submit', async e => {
-    e.preventDefault();
-    const inputs = e.target.querySelectorAll('input');
-    const email = inputs[0].value.trim();
-    const password = inputs[1].value;
-    const btn = e.target.querySelector('button[type="submit"]');
-    btn.textContent = 'Signing in...'; btn.disabled = true;
-
-    const { ok, data } = await apiFetch('/auth/login', {
-      method: 'POST', body: JSON.stringify({ email, password })
-    });
-
-    if (ok) {
-      window.location.href = 'dashboard.html';
-    } else {
-      btn.textContent = 'Authorize Access'; btn.disabled = false;
-      alert(data.error || 'Login failed. Check your credentials.');
-    }
-  });
-
-  // Register
-  document.getElementById('register-panel')?.addEventListener('submit', async e => {
-    e.preventDefault();
-    const inputs   = e.target.querySelectorAll('input');
-    const name     = inputs[0].value.trim();
-    const email    = inputs[1].value.trim();
-    const password = inputs[2].value;
-    const confirm  = inputs[3].value;
-
-    if (password !== confirm) { alert('Passwords do not match.'); return; }
-    if (password.length < 6)  { alert('Password must be at least 6 characters.'); return; }
-
-    const btn = e.target.querySelector('button[type="submit"]');
-    btn.textContent = 'Creating account...'; btn.disabled = true;
-
-    const { ok, data } = await apiFetch('/auth/register', {
-      method: 'POST', body: JSON.stringify({ name, email, password })
-    });
-
-    if (ok) {
-      window.location.href = 'dashboard.html';
-    } else {
-      btn.textContent = 'Create Account'; btn.disabled = false;
-      alert(data.error || 'Registration failed.');
-    }
-  });
-}
-
-// ══════════════════════════════════════════════════════════════════════════
 // PAGE: dashboard.html
 // ══════════════════════════════════════════════════════════════════════════
 
@@ -213,7 +129,7 @@ async function initDashboardPage() {
 
   // Real name greeting
   const h1 = document.getElementById('greeting');
-  if (h1) h1.textContent = `Good morning, ${user.name} 👋`;
+  if (h1) h1.textContent = `Welcome, ${user.name}`;
 
   const sub = document.getElementById('dashSubtitle');
   const now = new Date();
@@ -794,8 +710,8 @@ async function initAnalyticsPage() {
 // ══════════════════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
   const page = window.location.pathname.split('/').pop() || 'index.html';
-  if      (page==='regis.html' || page==='login.html' || page==='signup.html') initRegisPage();
-  else if (page==='dashboard.html')    initDashboardPage();
+  // regis.html is handled by AngularJS (AuthController) — no vanilla JS needed
+  if      (page==='dashboard.html')    initDashboardPage();
   else if (page==='transactions.html') initTransactionsPage();
   else if (page==='analytics.html')    initAnalyticsPage();
 });
