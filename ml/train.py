@@ -15,7 +15,7 @@ from sklearn.metrics import accuracy_score, classification_report, mean_absolute
 #    the same folder as this file, then run it.
 # ─────────────────────────────────────────────
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CSV_PATH  = os.path.join(BASE_DIR, "expanded_india_expense_dataset.csv")
+CSV_PATH  = os.path.join(BASE_DIR, "expense_dataset.csv")
 
 print("Loading dataset...")
 df = pd.read_csv(CSV_PATH)
@@ -73,6 +73,8 @@ print("--- Sanity Check ---")
 for t in test_cases:
     cat = svm_pipeline.predict([t])[0]
     print(f"  '{t}'  →  {cat}")
+
+print(df.head())
 
 # 8. Save classification model
 MODEL_PATH = os.path.join(BASE_DIR, "category_model.pkl")
