@@ -92,4 +92,4 @@ The ML layer is fully decoupled — if it goes offline, the app falls back grace
 
 ## License
 
-MIT © 2024
+MIT — see LICENSE for details.
